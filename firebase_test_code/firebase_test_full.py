@@ -5,13 +5,14 @@ from firebase_admin import credentials
 from firebase_admin import db
 from bluepy import btle
 import binascii
-import copy
 
 #Configuration of 3 ESP32's
 print("Connecting to ESP32_1...")
 dev = btle.Peripheral("98:F4:AB:6D:2C:86")
+time.sleep(1)
 print("Connecting to ESP32_2...")
 dev2 = btle.Peripheral("FC:F5:C4:0E:53:4A")
+time.sleep(1)
 print("Connecting to ESP32_3...")
 dev3 = btle.Peripheral("98:F4:AB:6E:61:42")
 
@@ -99,9 +100,12 @@ class Switch:
             print("ADD CODE HERE TO ENABLE OR DISABLE MACHINE LEARNING")
         if self.Switch_status != info.get()['Switch_status']:
             self.Switch_status = info.get()['Switch_status']
-            ESP32Config.write(bytes(info.get()['Switch_status'], encoding='utf-8'))
-            ESP32Config2.write(bytes(info.get()['Switch_status'], encoding='utf-8'))
-            ESP32Config3.write(bytes(info.get()['Switch_status'], encoding='utf-8'))
+            if(self.name == "Switch_1"):
+                ESP32Config.write(bytes(info.get()['Switch_status'], encoding='utf-8'))
+            if(self.name == "Switch_2"):
+                ESP32Config2.write(bytes(info.get()['Switch_status'], encoding='utf-8'))
+            if(self.name == "Switch_3"):
+                ESP32Config3.write(bytes(info.get()['Switch_status'], encoding='utf-8'))
             print("TELL THE ESP32 to change states")
 
 
